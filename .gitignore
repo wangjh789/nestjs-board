@@ -4,6 +4,7 @@
 
 #config
 /src/config
+.env
 
 # Logs
 logs

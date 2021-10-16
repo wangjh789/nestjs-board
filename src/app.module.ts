@@ -4,8 +4,10 @@ import { BoardModule } from './board/board.module';
 import { typeORMConfig } from './config/typeorm.config';
 import { AuthModule } from './auth/auth.module';
 
+
 @Module({
-  imports: [BoardModule,
+  imports: [
+    BoardModule,
     TypeOrmModule.forRoot(typeORMConfig),
     AuthModule
   ],
