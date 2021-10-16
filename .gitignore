@@ -4,6 +4,7 @@
 
 #config
 /src/config
+
 # Logs
 logs
 *.log
