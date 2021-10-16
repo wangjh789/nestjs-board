@@ -1,4 +1,5 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { DeleteResult } from 'typeorm';
 import {  BoardStatus } from './board-status.enum';
 import { Board } from './board.entity';
 import { BoardService } from './board.service';
@@ -9,10 +10,10 @@ import { BoardStatusValidationPipe } from './pipe/board-status-validation.pipe';
 export class BoardController { //private접근제한자를 생성자 안에서 사용해 암묵적으로 class property로 이용됨
     constructor(private boardService: BoardService){}
 
-    // @Get()
-    // getAllBoards():Board[]{
-    //     return this.boardService.getAllBoards();
-    // }
+    @Get()
+    getAllBoards():Promise<Board[]>{
+        return this.boardService.getAllBoards();
+    }
 
     @Post()
     @UsePipes(ValidationPipe)
@@ -21,20 +22,20 @@ export class BoardController { //private접근제한자를 생성자 안에서 �
     }
 
     @Get('/:id')
-    getBoardById(@Param("id") id:number):Promise<Board>{
+    getBoardById(@Param("id", ParseIntPipe) id:number):Promise<Board>{
         return this.boardService.getBoardById(id)
     }
 
-    // @Delete("/:id")
-    // deleteBoardById(@Param("id") boardId:string):void{
-    //     return this.boardService.deleteBoardById(boardId)
-    // }
+    @Delete("/:id")
+    deleteBoardById(@Param("id", ParseIntPipe) id:number):Promise<void>{
+        return this.boardService.deleteBoardById(id)
+    }
 
-    // @Patch('/:id/status')
-    // updateBoardStatus(
-    //     @Param('id') boardId:string, 
-    //     @Body('status',BoardStatusValidationPipe) status:BoardStatus
-    //     ):Board{
-    //     return this.boardService.updateBoardStatus(boardId,status)
-    // }
+    @Patch('/:id/status')
+    updateBoardStatus(
+        @Param('id') id:number, 
+        @Body('status',BoardStatusValidationPipe) status:BoardStatus
+        ):Promise<Board>{
+        return this.boardService.updateBoardStatus(id,status)
+    }
 }
